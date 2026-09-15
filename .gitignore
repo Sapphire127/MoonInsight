@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+moon_insight.egg-info/
+.pytest_cache/
+
+# 运行产物
+reports/
+
+# 密钥
+.env
+.env.*
+!.env.example
+
+# Claude 本地个人配置（权限等，不随仓库共享）
+.claude/settings.local.json
+
+# 构建与通用
+dist/
+coverage/
+output/
+*.log
