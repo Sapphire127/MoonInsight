@@ -15,10 +15,12 @@ class LLMProvider(Protocol):
         self,
         messages: list[dict[str, Any]],
         *,
+        tools: list[dict[str, Any]] | None = None,
         json_schema: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        """发起一次对话补全。
+        """发起一次对话补全，返回 OpenAI 形状的响应 dict。
 
+        tools 为 OpenAI 格式的工具定义，模型可返回 tool_calls；
         结构化输出（已锁决策 2）通过 json_schema 约束返回形状。
         """
         ...

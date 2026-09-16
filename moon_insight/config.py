@@ -7,3 +7,8 @@ hello world 阶段只有端口一项真实配置，其余随步骤补。
 import os
 
 BACKEND_PORT: int = int(os.environ.get("BACKEND_PORT", "8000"))
+
+# LLM 接入（已锁决策 ①：OpenAI 兼容格式；模型是配置项非选型）
+LLM_API_KEY: str = os.environ.get("LLM_API_KEY", "")
+LLM_BASE_URL: str = os.environ.get("LLM_BASE_URL", "https://api.deepseek.com")
+LLM_MODEL: str = os.environ.get("LLM_MODEL", "deepseek-chat")
