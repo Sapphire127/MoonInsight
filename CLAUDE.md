@@ -37,7 +37,7 @@ harness（上下文工程与 spec 资产：约定、规格、决策文档）与�
 - 工作流约定：`docs/agents/`；重大决策记录：`docs/adr/`（决策产生时创建）
 - SDD 规格资产：`.scratch/<feature>/`（spec、选型、issue，随仓库 push）
 - 正式代码：顶层包或 `src/`；`tests/` 与代码同版本
-- 前端（预留）：`web/`（Next.js 体系，网站路线激活时创建；与后端只经 HTTP/SSE 通信，语言边界即包边界）
+- 前端：`web/`（Next.js 体系，src/ 布局：`src/app/` 路由壳 + `src/main/` 分层；与后端只经 HTTP/SSE 通信，语言边界即包边界）
 - 运行产物与密钥（`reports/`、`.env`、`.venv/`、缓存）不入仓库，见 `.gitignore`
 
 命名映射（防混用）：品牌与仓库名 CamelCase（MoonInsight）；Python 包 snake_case（`moon_insight`）；打包名与路径 slug kebab-case（`moon-insight`）；CLI 命令全小写无分隔（`mooninsight`）。

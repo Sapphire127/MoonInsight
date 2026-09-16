@@ -1,7 +1,7 @@
 """LLMProvider 端口：LLM 接入的可替换性边界。
 
 已锁决策 1：OpenAI SDK 兼容格式接入，屏蔽供应商差异；
-生成/审校 per-task 可换模型。接口形状为初始草案，随 Step 0 实现细化。
+各任务 per-task 可换模型。接口形状为初始草案，随首个实现细化。
 """
 
 from typing import Any, Protocol, runtime_checkable
