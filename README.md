@@ -12,28 +12,6 @@
 
 金融助手 Agent —— 以 AI Agent 形态提供金融助手能力的参考级实现。
 
-## 架构
-
-```mermaid
-flowchart LR
-    subgraph Web["web/ · Next.js"]
-        Chat["聊天界面"]
-    end
-
-    subgraph Backend["app/ · Python"]
-        direction TB
-        Interfaces["interfaces · 交付与组装"]
-        Application["application · 用例编排"]
-        Domain["domain · 纯逻辑 + 端口抽象"]
-        Infrastructure["infrastructure · 端口实现"]
-    end
-
-    Chat -- "HTTP /api/*" --> Interfaces
-    Interfaces --> Application --> Domain
-    Infrastructure -- "实现端口" --> Domain
-    Infrastructure -. "LLMProvider 端口" .-> LLM[("LLM 供应商")]
-```
-
 ## 技术栈
 
 - Python 3.12 + FastAPI + OpenAI SDK（模型是配置项，首例 DeepSeek）
