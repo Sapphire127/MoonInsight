@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import type { ChatMessage } from "@/main/domain/chat";
 import { sendChat } from "@/main/domain/shared/chatClient";
+import { Badge } from "@/main/page/shared/ui/badge";
 import { Button } from "@/main/page/shared/ui/button";
 import { Card, CardContent } from "@/main/page/shared/ui/card";
 import { Input } from "@/main/page/shared/ui/input";
@@ -59,9 +60,15 @@ export function Chat() {
               <CardContent>
                 <p>{m.content}</p>
                 {m.toolCalls?.map((tc, i) => (
-                  <p key={i} className="mt-1 text-xs text-muted-foreground">
-                    工具 {tc.name}（{JSON.stringify(tc.arguments)}）→ {tc.result}
-                  </p>
+                  <div
+                    key={i}
+                    className="mt-2 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground"
+                  >
+                    <Badge variant="secondary">{tc.name}</Badge>
+                    <span className="font-mono">{JSON.stringify(tc.arguments)}</span>
+                    <span>→</span>
+                    <span className="font-medium text-foreground">{tc.result}</span>
+                  </div>
                 ))}
               </CardContent>
             </Card>
