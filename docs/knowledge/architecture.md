@@ -5,7 +5,7 @@
 harness（上下文工程与 spec 资产：约定、规格、决策文档）与正式代码同仓库、分区存放：
 
 - 根层上下文：`CLAUDE.md`（约定单一事实源）、`AGENTS.md`（跨工具指针，内容不重复）、`CONTEXT.md`、`.gitignore`
-- 项目级 harness：`.claude/`（`settings.local.json` 为本地个人配置，不入库）
+- 项目级 harness：`.claude/`（`settings.local.json` 为本地个人配置，不入库）；项目级技能：`.agents/skills/`（universal 格式源文件，`.claude/skills/` 符号链接接入 Claude Code，`skills-lock.json` 锁版本）
 - 约定文档：`docs/agents/`（工作流约定）、`docs/knowledge/`（工程约定与知识库）、`docs/adr/`（重大决策，决策产生时创建）
 - SDD 规格资产：`.scratch/<feature>/`（spec、选型、issue，随仓库 push）
 - 正式代码（前后端平级，各自为完整项目）：

@@ -1,7 +1,13 @@
 "use client";
+
+// 聊天界面：阶段 ① 的最小前后端联动（普通 JSON，流式待拍板后升级）
 import { useState } from "react";
+
 import type { ChatMessage } from "@/main/domain/chat";
 import { sendChat } from "@/main/domain/shared/chatClient";
+import { Button } from "@/main/page/shared/ui/button";
+import { Card, CardContent } from "@/main/page/shared/ui/card";
+import { Input } from "@/main/page/shared/ui/input";
 
 export function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -39,30 +45,39 @@ export function Chat() {
   }
 
   return (
-    <div className="chat">
-      <h1>MoonInsight</h1>
-      <div className="chatList">
+    <div className="mx-auto flex max-w-2xl flex-col gap-4 p-6">
+      <h1 className="text-xl font-semibold">MoonInsight</h1>
+      <div className="flex flex-col gap-2">
         {messages.map((m) => (
-          <div key={m.id} className={`message ${m.role}`}>
-            <div className="content">{m.content}</div>
-            {m.toolCalls?.map((tc, i) => (
-              <div key={i} className="toolCall">
-                工具 {tc.name}（{JSON.stringify(tc.arguments)}）→ {tc.result}
-              </div>
-            ))}
+          <div
+            key={m.id}
+            className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+          >
+            <Card
+              className={`max-w-[80%] ${m.role === "user" ? "bg-primary/10" : ""}`}
+            >
+              <CardContent>
+                <p>{m.content}</p>
+                {m.toolCalls?.map((tc, i) => (
+                  <p key={i} className="mt-1 text-xs text-muted-foreground">
+                    工具 {tc.name}（{JSON.stringify(tc.arguments)}）→ {tc.result}
+                  </p>
+                ))}
+              </CardContent>
+            </Card>
           </div>
         ))}
       </div>
-      <div className="inputRow">
-        <input
+      <div className="flex gap-2">
+        <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
           disabled={busy}
         />
-        <button onClick={handleSend} disabled={busy}>
+        <Button onClick={handleSend} disabled={busy}>
           发送
-        </button>
+        </Button>
       </div>
     </div>
   );

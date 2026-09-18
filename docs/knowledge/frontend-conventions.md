@@ -56,10 +56,15 @@
 - **批量脚本仅在结构高度一致时使用**：至少手动验证过 2 个文件确认模式完全相同后再用
 - **保留 git 备份点**：批量修改前确认工作区干净，出问题快速回退
 
+## 样式方案（已定稿）
+
+- **Tailwind CSS v4**（utility-first，PostCSS 插件接入）+ **shadcn/ui**（组件源码进项目）+ OKLCH 设计令牌（`globals.css` 的 CSS 变量体系）
+- 基础 UI 组件放 `src/main/page/shared/ui/`（跨模块共享组件）；`cn` 合并工具放 `src/main/page/shared/utils.ts`
+- **命名例外**：`page/shared/ui/` 下的 shadcn 组件文件名跟随上游惯例（小写，如 `button.tsx`），导出组件名仍 PascalCase（`Button`）；自有业务组件文件仍按 PascalCase 命名——例外原因：保持与 `npx shadcn add` 生成行为及上游 diff 的一致性
+- **组合规则**：间距用 `gap-*` 不用 `space-y-*`；等宽高用 `size-*`；颜色只用语义 token（`bg-primary`、`text-muted-foreground` 等），不写裸色值；暗色模式由 token 自动承载，不手写 `dark:` 覆盖
+
 ## 待定（对应设施引入时补规则）
 
-- 样式方案：Tailwind 落地后定设计令牌与作用域规则
 - 状态管理：若引入状态库，补「UI 与状态分离」细则
 - 国际化：若启用，采用两级 Key 结构（顶层共享键 + 模块命名空间）
-- 组件库覆盖规则：若引入组件库，覆盖样式必须从组件根类名嵌套，不污染全局
 - 表单验证与错误反馈：出现表单场景时补规则

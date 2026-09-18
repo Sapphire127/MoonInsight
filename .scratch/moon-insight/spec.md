@@ -87,6 +87,7 @@
 6. **走通的定义（前后端联动）**：后续阶段的「走通」= **前端参与的完整链路**——用户在前端页面发起对话，后端 Agent 处理，结果（含流式）回到前端渲染；仅后端测试通过不算走通。阶段 ① 已完成：后端集成测试与前端联动（经 dev 代理的真实问答闭环）均已验证
 7. **后端分层对齐四层架构**：`domain/`（纯逻辑 + 端口抽象，含 `domain/ports/` 与 `domain/shared/`）/ `application/`（用例编排）/ `infrastructure/`（端口实现）/ `interfaces/`（FastAPI 交付与组装）——与既有惯例统一，替代原 ports/adapters/pipeline/api 命名切法
 8. **仓库形态对齐平级项目**：前后端各为完整项目平级存放——后端 `app/`（Python 项目：pyproject + `src/moon_insight/` 四层 + `_tests_/`，src 布局）、前端 `web/`；根目录只放 harness 与跨项目资产
+9. **前端样式方案定稿**：Tailwind CSS v4 + shadcn/ui + OKLCH 设计令牌（shadcn 官方注册表不可达时手工落地源码，components.json 保留别名指向 `@/main/page/shared/ui`）；基础组件进 `src/main/page/shared/ui/`；以通用 Agent 视角选型，不绑定任何业务主题
 
 ## 盘问状态
 
