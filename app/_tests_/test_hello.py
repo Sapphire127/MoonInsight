@@ -2,7 +2,7 @@
 
 from fastapi.testclient import TestClient
 
-from moon_insight.api.main import app
+from moon_insight.interfaces.main import app
 
 client = TestClient(app)
 

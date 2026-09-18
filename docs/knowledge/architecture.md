@@ -8,8 +8,10 @@ harness（上下文工程与 spec 资产：约定、规格、决策文档）与�
 - 项目级 harness：`.claude/`（`settings.local.json` 为本地个人配置，不入库）
 - 约定文档：`docs/agents/`（工作流约定）、`docs/knowledge/`（工程约定与知识库）、`docs/adr/`（重大决策，决策产生时创建）
 - SDD 规格资产：`.scratch/<feature>/`（spec、选型、issue，随仓库 push）
-- 正式代码：顶层包或 `src/`；`_tests_/` 与代码同版本（前端测试随 `web/src/_tests_/` 惯例）
-- 前端：`web/`（Next.js 体系，src/ 布局：`src/app/` 路由壳 + `src/main/` 分层；与后端只经 HTTP/SSE 通信，语言边界即包边界）
+- 正式代码（前后端平级，各自为完整项目）：
+  - 后端 `app/`：Python 项目（`pyproject.toml` + `src/moon_insight/` 四层 + `_tests_/` + `.env`，src 布局，import `moon_insight.xxx`）
+  - 前端 `web/`：Next.js 项目（src/ 布局：`src/app/` 路由壳 + `src/main/` 分层；测试随 `src/_tests_/`）
+  - 前后端只经 HTTP/SSE 通信（语言边界即包边界）；根目录只放 harness 与跨项目资产
 - 运行产物与密钥（`reports/`、`.env`、`.venv/`、缓存）不入仓库，见 `.gitignore`
 
 ## 命名映射（防混用）

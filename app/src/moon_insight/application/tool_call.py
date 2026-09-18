@@ -1,28 +1,31 @@
 """阶段 ①：单次工具调用往返。
 
-用户消息 → LLM（携带工具定义）→ 模型返回 tool_calls → 代码执行工具 →
+用户消息 → LLM（携带工具定义）→ 模型返回 tool_calls → 执行器执行 →
 结果回填 → LLM 给出最终回答。带步数上限的完整循环在阶段 ② 引入。
+
+工具定义与执行器均由使用端注入——application 不 import 任何具体工具。
 """
 
 import json
+from collections.abc import Callable
 from typing import Any
 
-from moon_insight.domain.tools import execute_tool
-from moon_insight.ports.llm import LLMProvider
+from moon_insight.domain.ports.llm import LLMProvider
+
+ToolExecutor = Callable[[str, dict[str, Any]], str]
 
 
 def run_tool_call_round(
     provider: LLMProvider,
     tools: list[dict[str, Any]],
     user_message: str,
+    executor: ToolExecutor,
 ) -> dict[str, Any]:
     """执行一次「提问 → 工具调用 → 回填 → 回答」往返。
 
     返回 {"final_answer": str, "tool_calls": [...]}。
     """
-    messages: list[dict[str, Any]] = [
-        {"role": "user", "content": user_message}
-    ]
+    messages: list[dict[str, Any]] = [{"role": "user", "content": user_message}]
 
     first = provider.chat(messages, tools=tools)
     message = first["choices"][0]["message"]
@@ -33,16 +36,12 @@ def run_tool_call_round(
         for call in message["tool_calls"]:
             fn = call["function"]
             arguments = json.loads(fn["arguments"] or "{}")
-            result = execute_tool(fn["name"], arguments)
+            result = executor(fn["name"], arguments)
             tool_calls.append(
                 {"name": fn["name"], "arguments": arguments, "result": result}
             )
             messages.append(
-                {
-                    "role": "tool",
-                    "tool_call_id": call["id"],
-                    "content": result,
-                }
+                {"role": "tool", "tool_call_id": call["id"], "content": result}
             )
         final = provider.chat(messages, tools=tools)
         message = final["choices"][0]["message"]

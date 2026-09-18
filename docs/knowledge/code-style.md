@@ -26,5 +26,13 @@
 
 ## 栈内落点
 
-- Python：关注点分离即依赖方向——`api/` 组装、`pipeline/` 编排、`domain/` 纯逻辑（见 `architecture.md`）
+- Python：关注点分离即依赖方向——`interfaces/` 组装、`application/` 编排、`domain/` 纯逻辑、`infrastructure/` 实现（见 `architecture.md`）
 - 前端：`src/app/` 路由壳、`src/main/page/` 展示组件、通信层独立——UI 与数据获取分离
+
+## Python 分层依赖方向（硬规则，违反即重构）
+
+- `domain/`：零 IO、零框架依赖，只允许标准库——纯逻辑与端口抽象的归宿（端口抽象在 `domain/ports/`，领域共享在 `domain/shared/`）
+- `application/`：用例编排，只依赖 domain 的端口抽象与纯逻辑（依赖注入），不认识任何具体实现
+- `infrastructure/`：实现 domain 的端口抽象（如 LLMProvider），各实现互相不 import
+- `interfaces/`：交付层（路由 + DTO），唯一的组装点——把 infrastructure 实现注入 application
+- import 分组：标准库 → 第三方 → 项目内，组间空行

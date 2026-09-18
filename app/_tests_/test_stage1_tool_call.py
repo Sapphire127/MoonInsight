@@ -8,9 +8,9 @@ import os
 
 import pytest
 
-from moon_insight.adapters.deepseek_llm import DeepSeekLLM
-from moon_insight.domain.tools import TOOLS
-from moon_insight.pipeline.tool_call import run_tool_call_round
+from moon_insight.demo_tools import TOOLS, execute_demo_tool
+from moon_insight.application.tool_call import run_tool_call_round
+from moon_insight.infrastructure.deepseek_llm import DeepSeekLLM
 
 pytestmark = pytest.mark.skipif(
     not os.environ.get("LLM_API_KEY"),
@@ -20,7 +20,7 @@ pytestmark = pytest.mark.skipif(
 
 def test_calculator_tool_call_round() -> None:
     provider = DeepSeekLLM()
-    result = run_tool_call_round(provider, TOOLS, "请计算 (3+5)*2 的结果")
+    result = run_tool_call_round(provider, TOOLS, "请计算 (3+5)*2 的结果", execute_demo_tool)
 
     assert result["tool_calls"], "模型应发起至少一次 calculator 工具调用"
     assert result["tool_calls"][0]["name"] == "calculator"

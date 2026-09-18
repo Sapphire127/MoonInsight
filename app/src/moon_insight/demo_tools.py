@@ -1,7 +1,8 @@
-"""通用示例工具：计算器（阶段 ① 的最小工具）。
+"""阶段验证用的演示工具（calculator）。
 
-展示确定性优先原则（已锁决策 ②）：LLM 只产出工具调用，
-数值计算由代码完成。表达式求值用 ast 白名单，只允许数字与四则运算。
+这是验证「工具调用链路」的脚手架，不属于框架业务（spec 用户拍板决策 5）：
+框架自身不携带任何业务工具，本模块供测试与 interfaces 演示共用，业务工具到来时移除。
+application 不依赖本模块——工具定义与执行器均由使用端注入。
 """
 
 import ast
@@ -62,12 +63,9 @@ TOOLS: list[dict[str, Any]] = [
     }
 ]
 
-_TOOL_FUNCTIONS: dict[str, Any] = {"calculator": calculator}
 
-
-def execute_tool(name: str, arguments: dict[str, Any]) -> str:
-    """按名字执行工具并返回字符串结果。"""
-    fn = _TOOL_FUNCTIONS.get(name)
-    if fn is None:
-        return f"error: unknown tool {name}"
-    return fn(**arguments)
+def execute_demo_tool(name: str, arguments: dict[str, Any]) -> str:
+    """演示工具的执行器：由使用端注入 pipeline 的 executor 参数。"""
+    if name == "calculator":
+        return calculator(arguments["expression"])
+    return f"error: unknown tool {name}"

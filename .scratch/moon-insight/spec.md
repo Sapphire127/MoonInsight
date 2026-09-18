@@ -84,7 +84,9 @@
 3. **流式体验**：问答场景采用流式输出——适合长文本与工具调用进度展示；具体流式方式（SSE 等）待定
 4. **演进策略**：采用五阶段演进路径——① 先跑通一次工具调用 → ② 包成带步数上限的 Agent 循环 → ③ 加真实工具 → ④ 加记忆与状态 → ⑤ 再上编排框架（来源：[Scrimba: How to Build AI Agents](https://scrimba.com/articles/how-to-build-ai-agents/)）。架构阵营按三分法定位：当前走「供应商 API 之上的自研薄封装 + MCP」阵营，复杂度起来后迁 LangGraph（与已锁决策 ④ 一致；来源：[O'Reilly: The AI Agents Stack](https://www.oreilly.com/radar/the-ai-agents-stack-2026-edition/)）。行业缺口「89% 有可观测 vs 仅 52% 有评估」是本项目差异化空间——评估先行
 5. **阶段 ① 验证物的定性**：四则运算（calculator）属**测试验证内容**——它是验证「工具调用链路」的脚手架，不属于框架业务；业务工具由业务阶段提供，届时该示例移入测试或移除
-6. **走通的定义（前后端联动）**：后续阶段的「走通」= **前端参与的完整链路**——用户在前端页面发起对话，后端 Agent 处理，结果（含流式）回到前端渲染；仅后端测试通过不算走通。阶段 ① 当前仅有后端集成测试验证，前端联动验证随后续阶段补上
+6. **走通的定义（前后端联动）**：后续阶段的「走通」= **前端参与的完整链路**——用户在前端页面发起对话，后端 Agent 处理，结果（含流式）回到前端渲染；仅后端测试通过不算走通。阶段 ① 已完成：后端集成测试与前端联动（经 dev 代理的真实问答闭环）均已验证
+7. **后端分层对齐四层架构**：`domain/`（纯逻辑 + 端口抽象，含 `domain/ports/` 与 `domain/shared/`）/ `application/`（用例编排）/ `infrastructure/`（端口实现）/ `interfaces/`（FastAPI 交付与组装）——与既有惯例统一，替代原 ports/adapters/pipeline/api 命名切法
+8. **仓库形态对齐平级项目**：前后端各为完整项目平级存放——后端 `app/`（Python 项目：pyproject + `src/moon_insight/` 四层 + `_tests_/`，src 布局）、前端 `web/`；根目录只放 harness 与跨项目资产
 
 ## 盘问状态
 

@@ -9,7 +9,7 @@ from typing import Any
 from openai import OpenAI
 
 from moon_insight.config import LLM_API_KEY, LLM_BASE_URL, LLM_MODEL
-from moon_insight.ports.llm import LLMProvider
+from moon_insight.domain.ports.llm import LLMProvider
 
 
 class DeepSeekLLM(LLMProvider):
