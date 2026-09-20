@@ -13,7 +13,7 @@ jobs:
         working-directory: app
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10
+      - uses: astral-sh/setup-uv@v10.1.0
         with:
           enable-cache: true
           cache-dependency-glob: "app/uv.lock"
@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       # E2E 的 webServer 会拉起 app/.venv 里的 uvicorn，先同步后端 venv
-      - uses: astral-sh/setup-uv@v10
+      - uses: astral-sh/setup-uv@v10.1.0
         with:
           enable-cache: true
           cache-dependency-glob: "app/uv.lock"
