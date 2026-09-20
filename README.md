@@ -9,6 +9,7 @@
 ![uv](https://img.shields.io/badge/uv-DE4FE7?logo=uv&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=white)
 ![pytest](https://img.shields.io/badge/pytest-0A9EDC?logo=pytest&logoColor=white)
+[![CI](https://github.com/Sapphire127/MoonInsight/actions/workflows/ci.yml/badge.svg)](https://github.com/Sapphire127/MoonInsight/actions/workflows/ci.yml)
 
 金融助手 Agent —— 以 AI Agent 形态提供金融助手能力的参考级实现。
 
@@ -44,6 +45,9 @@ cd web && pnpm dev
 
 # 测试（app/ 目录）
 cd app && uv run pytest       # fake 注入测试零成本；真实 LLM 测试需配置 LLM_API_KEY
+
+# 端到端测试（web/ 目录，自动拉起前后端）
+cd web && pnpm test:e2e
 ```
 
 ## 免责声明
