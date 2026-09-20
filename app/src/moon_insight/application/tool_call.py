@@ -1,7 +1,7 @@
-"""阶段 ①：单次工具调用往返。
+"""阶段 ②：带步数上限的 Agent 循环。
 
-用户消息 → LLM（携带工具定义）→ 模型返回 tool_calls → 执行器执行 →
-结果回填 → LLM 给出最终回答。带步数上限的完整循环在阶段 ② 引入。
+Reason（LLM 决策）→ Act（执行工具）→ Observe（回填结果）→ Repeat，
+直到模型不再发起工具调用或触达步数上限（防死循环）。
 
 工具定义与执行器均由使用端注入——application 不 import 任何具体工具。
 """
@@ -14,24 +14,35 @@ from moon_insight.domain.ports.llm import LLMProvider
 
 ToolExecutor = Callable[[str, dict[str, Any]], str]
 
+MAX_STEPS = 4
 
-def run_tool_call_round(
+
+def run_agent_loop(
     provider: LLMProvider,
     tools: list[dict[str, Any]],
     user_message: str,
     executor: ToolExecutor,
+    max_steps: int = MAX_STEPS,
 ) -> dict[str, Any]:
-    """执行一次「提问 → 工具调用 → 回填 → 回答」往返。
+    """运行「决策 → 执行 → 观察」循环，直到模型给出最终回答。
 
-    返回 {"final_answer": str, "tool_calls": [...]}。
+    返回 {"final_answer": str, "tool_calls": [...], "steps": int,
+    "hit_limit": bool}——steps 与 hit_limit 供运行记录与前端展示。
     """
     messages: list[dict[str, Any]] = [{"role": "user", "content": user_message}]
-
-    first = provider.chat(messages, tools=tools)
-    message = first["choices"][0]["message"]
-
     tool_calls: list[dict[str, Any]] = []
-    if message.get("tool_calls"):
+    steps = 0
+
+    while steps < max_steps:
+        resp = provider.chat(messages, tools=tools)
+        message = resp["choices"][0]["message"]
+        if not message.get("tool_calls"):
+            return {
+                "final_answer": message.get("content") or "",
+                "tool_calls": tool_calls,
+                "steps": steps,
+                "hit_limit": False,
+            }
         messages.append(message)  # assistant 消息（含 tool_calls）
         for call in message["tool_calls"]:
             fn = call["function"]
@@ -43,10 +54,13 @@ def run_tool_call_round(
             messages.append(
                 {"role": "tool", "tool_call_id": call["id"], "content": result}
             )
-        final = provider.chat(messages, tools=tools)
-        message = final["choices"][0]["message"]
+        steps += 1
 
+    # 触达上限：再请求一次最终回答，并标记 hit_limit
+    final = provider.chat(messages, tools=tools)
     return {
-        "final_answer": message.get("content") or "",
+        "final_answer": final["choices"][0]["message"].get("content") or "",
         "tool_calls": tool_calls,
+        "steps": steps,
+        "hit_limit": True,
     }

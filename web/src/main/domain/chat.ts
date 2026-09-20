@@ -16,4 +16,6 @@ export interface ChatMessage {
 export interface ChatResponse {
   final_answer: string;
   tool_calls: ToolCallRecord[];
+  steps?: number;
+  hit_limit?: boolean;
 }

@@ -88,6 +88,8 @@
 7. **后端分层对齐四层架构**：`domain/`（纯逻辑 + 端口抽象，含 `domain/ports/` 与 `domain/shared/`）/ `application/`（用例编排）/ `infrastructure/`（端口实现）/ `interfaces/`（FastAPI 交付与组装）——与既有惯例统一，替代原 ports/adapters/pipeline/api 命名切法
 8. **仓库形态对齐平级项目**：前后端各为完整项目平级存放——后端 `app/`（Python 项目：pyproject + `src/moon_insight/` 四层 + `_tests_/`，src 布局）、前端 `web/`；根目录只放 harness 与跨项目资产
 9. **前端样式方案定稿**：Tailwind CSS v4 + shadcn/ui + OKLCH 设计令牌（shadcn 官方注册表不可达时手工落地源码，components.json 保留别名指向 `@/main/page/shared/ui`）；基础组件进 `src/main/page/shared/ui/`；以通用 Agent 视角选型，不绑定任何业务主题
+10. **阶段 ② 循环参数**：Agent 循环步数上限 4 轮（MAX_STEPS）；触达上限后再请求一次最终回答并标记 hit_limit；响应携带 steps/hit_limit 供运行记录与前端展示
+11. **E2E 沉淀方案与 fake 定位**：浏览器流程固化为仓库内 Playwright E2E（`web/e2e/` + `@playwright/test`），webServer 自动拉起前端（5174）+ fake 后端（8001），端口刻意避开开发环境（5173/8000）；测试策略 fake 为主（`MOON_INSIGHT_LLM=fake` 注入 DemoLLM）+ 真实 LLM 可选（有 key 时跑，pytest 已有 skipif 模式）；Fake LLM 定位于 infrastructure（端口实现，长期回归线组成部分，区别于 demo_tools 脚手架）——ScriptedLLM 纯回放器（脚本显式注入、零理解逻辑、脚本耗尽抛错）+ DemoLLM E2E 演示回放器（两条封顶路径，路径穷举归 pytest 层）；前端 dev 代理目标 env 化（`MOON_INSIGHT_BACKEND_URL`，默认 8000）
 
 ## 盘问状态
 

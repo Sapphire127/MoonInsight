@@ -21,3 +21,6 @@ dist/
 coverage/
 output/
 *.log
+
+# Playwright MCP 运行产物
+.playwright-mcp/

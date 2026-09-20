@@ -1,2 +1,6 @@
 node_modules/
 .next/
+
+# Playwright E2E 运行产物
+playwright-report/
+test-results/
